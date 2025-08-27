@@ -1,0 +1,26 @@
+# ------------
+# Python & Venv
+# ------------
+venv/
+*.pyc
+__pycache__/
+*.pyo
+*.pyd 
+
+# -------------
+# IDE / Editor 
+# -------------
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workplace
+
+# -------------
+# Data Files
+# -------------
+# Large Shape Files
+*.shp 
+*.shx
+*.dbf
+*.prj
+
