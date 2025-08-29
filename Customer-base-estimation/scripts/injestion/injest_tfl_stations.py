@@ -1,16 +1,25 @@
 
-from pyspark.sql import SparkSession
+from utlis.sparkSession import get_spark
 from pyspark.sql.functions import current_timestamp, input_file_name
 
-spark = SparkSession.builder.appName("IngestTFL").getOrCreate()
+RAW_PATH = "Customer-base-estimation/rawData/tflStations.csv"
 
-RAW_PATH = "/rawData/tflStations.csv"
-BRONZE_PATH = "/datalakehouse/bronze/tfl"
+OUTPUT_PATH = "Customer-base-estimation/datalakehouse/bronze/tfl"
 
-df = (spark.read.option("header", True).csv(RAW_PATH)
-    .withColumn("ingest_timestamp", current_timestamp())
-    .withColumn("source_file", input_file_name())
-)
+def main():
+    spark = get_spark("tflStationsIngest")
 
-(df.write.format("parquet").mode("overwrite").save(BRONZE_PATH))
+    df = (spark.read.option("header", True).csv(RAW_PATH)
+          .withColumn("ingest_timestamp", current_timestamp())
+          .withColumn("source_file", input_file_name)
+        )
+    
+    (df.write.format("parquet")
+     .mode("overwrite")
+     .save(OUTPUT_PATH)
+    )
 
+    print("Ingestion Complete")
+
+if __name__ == "__main__":
+    main()
